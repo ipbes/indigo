@@ -72,6 +72,13 @@ python manage.py update_countries_plus
 python manage.py loaddata languages_data.json.gz
 ```
 
+you can link the country data (django-countries-plus) with language data (django-languages-plus). Once both are installed run the following command (optional). See https://pypi.org/project/django-languages_plus/ for more info.
+
+```
+from languages_plus.utils import associate_countries_and_languages
+associate_countries_and_languages
+```
+
 If you have trouble connecting to your database, you may need to change the default database settings in `indigo/settings.py`:
 
     db_config = dj_database_url.config(default='postgres://indigo:indigo@localhost:5432/indigo')

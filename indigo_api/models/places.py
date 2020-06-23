@@ -18,7 +18,7 @@ class Language(models.Model):
 
     @property
     def code(self):
-        """ 3 letter language code.
+        """ 3 letter language code.(the full list of options are iso_639_1, iso_639_2T, iso_639_2B and iso_639_3 )
         """
         return self.language.iso_639_2B
 
