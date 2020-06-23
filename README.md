@@ -33,7 +33,7 @@ Ensure you have python 3.6, [virtualenv and pip](https://virtualenv.pypa.io/en/s
 Create and activate a virtualenv and install dependencies:
 
 ```bash
-virtualenv env --no-site-packages
+virtualenv env --no-site-packages -p python3.6
 source env/bin/activate
 pip install -e '.[test]'
 ```
@@ -41,9 +41,15 @@ pip install -e '.[test]'
 Ensure you have [PostgreSQL](https://www.postgresql.org/) installed and running. Create a postgresql user with username and password `indigo`,
 and create a corresponding database called `indigo`.
 
+If you have an old Mac you may need to install postgres from a package file: https://www.enterprisedb.com/downloads/postgres-postgresql-downloads. Once installation is complete make sure you add "export path" to your bash profile. For an installation of postgres 12 the path would look like this
+
+```
+export PATH="/Library/PostgreSQL/12/bin:${PATH}"
+```
+
 ```bash
-sudo su - postgres -c 'createuser -d -P indigo'
-sudo su - postgres -c 'createdb indigo'
+sudo su - _postgres -c 'createuser -d -P indigo'
+sudo su - _postgres -c 'createdb indigo'
 ```
 
 Check that you can connect to the postgresql database as your regular shell user (not indigo user) by means of password authentication:

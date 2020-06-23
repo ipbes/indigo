@@ -131,7 +131,7 @@ INDIGO = {
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
 import dj_database_url
-db_config = dj_database_url.config(default='postgres://indigo:indigo@localhost:5432/indigo')
+db_config = dj_database_url.config(default='postgres://postgres:postgres@localhost:5432/postgres')
 db_config['ATOMIC_REQUESTS'] = True
 DATABASES = {
     'default': db_config,

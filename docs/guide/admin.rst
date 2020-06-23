@@ -3,14 +3,14 @@
 The Admin Area
 ==============
 
-Indigo has a backend Admin area that lets adminstrator users control some internal settings of how Indigo works. Only adminstrator (staff) users have access to this area.
+Indigo has a backend Admin area that lets administrator users control some internal settings of how Indigo works. Only adminstrator (staff) users have access to this area.
 
 Logging In
 ----------
 
 To log into the Admin area:
 
-1. Log into Indigo 
+1. Log into Indigo
 2. Click your name in the top-right corner
 3. Click **Site Settings**
 
