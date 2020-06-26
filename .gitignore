@@ -12,3 +12,4 @@ node_modules/
 *.egg-info
 .ruby-version
 .DS_Store
+work-attachments/
