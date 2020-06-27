@@ -2,10 +2,10 @@
 from nose.tools import *  # noqa
 
 from django.test import testcases
-from indigo_za.importer import ImporterZA
+from indigo_un.importer import ImporterUN
 
 
-class ImporterZATestCase(testcases.TestCase):
+class ImporterUNTestCase(testcases.TestCase):
     def setUp(self):
         self.importer = ImporterZA()
 

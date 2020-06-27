@@ -6,11 +6,12 @@ from indigo.plugins import plugins
 
 
 @plugins.register('importer')
-class ImporterZA(Importer):
-    """ Importer for the South African tradition.
+class ImporterUN(Importer):
+    """ Importer for the United Nations tradition.
     """
-    locale = ('za', None, None)
+    locale = ('un', None, None)
 
+    # todo: create slaw grammar for UN
     slaw_grammar = 'za'
 
     boilerplate_re1 = re.compile('|'.join([

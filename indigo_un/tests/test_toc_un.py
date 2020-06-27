@@ -4,11 +4,11 @@ from nose.tools import *  # noqa
 from rest_framework.test import APITestCase
 
 from indigo_api.tests.fixtures import *  # noqa
-from indigo_za.toc import TOCBuilderZA
+from indigo_un.toc import TOCBuilderUN
 from indigo_api.models import Document, Work, Language
 
 
-class TOCBuilderZATestCase(APITestCase):
+class TOCBuilderUNTestCase(APITestCase):
     fixtures = ['languages_data', 'countries', 'user', 'taxonomies', 'work']
 
     def setUp(self):

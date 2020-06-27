@@ -18,8 +18,8 @@ def section_title(item):
 
 
 @plugins.register('toc')
-class TOCBuilderZA(TOCBuilderBase):
-    locale = ('za', None, None)
+class TOCBuilderUN(TOCBuilderBase):
+    locale = ('un', None, None)
 
     toc_elements = ['coverpage', 'preface', 'preamble', 'part', 'subpart', 'chapter', 'section', 'article', 'conclusions', 'doc']
     toc_non_unique_components = ['chapter', 'part', 'subpart']
