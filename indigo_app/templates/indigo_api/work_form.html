@@ -58,6 +58,18 @@
         </div>
 
         <div class="form-row">
+          <div class="form-group col-12">
+            <label for="work_locality">UN organisation/agency/MEA/secretariat (Locality)</label>
+            <select id="work_locality" class="form-control">
+              <option value="">(none)</option>
+              {% for locality in localitys %}
+              <option value="{{ work.locality.code }}">{{ work.locality }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
           <div class="form-group col-md-3">
             <label for="work_year" class="required">Year of introduction</label>
             <input type="text" class="form-control" id="work_year" required pattern="\d{4}" placeholder="yyyy">
