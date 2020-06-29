@@ -131,10 +131,10 @@ INDIGO = {
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
 # home db: db_config = dj_database_url.config(default='postgres://postgres:postgres@localhost:5432/postgres')
-# office db: db_config = dj_database_url.config(default='postgres://postgres:postgres@localhost:5432/postgres')
+# office db: db_config = dj_database_url.config(default='postgres://postgres:indigo@localhost:5432/postgres')
 
 import dj_database_url
-db_config = dj_database_url.config(default='postgres://postgres:postgres@localhost:5432/postgres')
+db_config = dj_database_url.config(default='postgres://postgres:indigo@localhost:5432/postgres')
 db_config['ATOMIC_REQUESTS'] = True
 DATABASES = {
     'default': db_config,
