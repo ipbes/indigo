@@ -1,1 +1,3 @@
-web: gunicorn --worker-class gevent indigo.wsgi:application -t 600 --log-file -
+web: gunicorn indigo.wsgi:application
+
+release: python manage.py migrate --noinput
