@@ -1,3 +1,3 @@
-web: gunicorn config.wsgi:application
+web: gunicorn indigo.wsgi:application
 
 release: python manage.py migrate --noinput

@@ -1,4 +1,1 @@
-WAIT=10
-ATTEMPTS=5
-
-/accounts/login/ Indigo
+/                       django_dokku_example
