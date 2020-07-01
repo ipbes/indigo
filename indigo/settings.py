@@ -132,6 +132,7 @@ INDIGO = {
 
 # home db: db_config = dj_database_url.config(default='postgres://postgres:postgres@localhost:5432/postgres')
 # office db: db_config = dj_database_url.config(default='postgres://postgres:indigo@localhost:5432/postgres')
+# dj_database_url.config(default='=postgres://indigo:DATABASE-PASSWORD@DATABASE-HOST/indigo \
 
 import dj_database_url
 db_config = dj_database_url.config(default='postgres://postgres:indigo@localhost:5432/postgres')
