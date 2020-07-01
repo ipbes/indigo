@@ -135,7 +135,7 @@ INDIGO = {
 # dj_database_url.config(default='=postgres://indigo:DATABASE-PASSWORD@DATABASE-HOST/indigo \
 
 import dj_database_url
-db_config = dj_database_url.config(default='postgres://postgres:indigo@localhost:5432/postgres')
+db_config = dj_database_url.config(default='postgres://indigo:indigo@localhost:5432/indigo')
 db_config['ATOMIC_REQUESTS'] = True
 DATABASES = {
     'default': db_config,
