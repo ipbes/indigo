@@ -1,1 +1,4 @@
-/                       django_dokku_example
+WAIT=10
+ATTEMPTS=5
+
+/accounts/login/
