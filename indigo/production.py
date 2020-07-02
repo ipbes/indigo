@@ -1,4 +1,5 @@
 from .settings import *
+import dj_database_url
 
 # Configure default domain name
 ALLOWED_HOSTS = [os.environ['WEBSITE_SITE_NAME'] + '.akn4undocs.ipbes.net', '127.0.0.1'] if 'WEBSITE_SITE_NAME' in os.environ else []
@@ -20,12 +21,5 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Configure Postgres database
-DATABASES = {                                                                    
-    'default': {                                                                 
-        'ENGINE': 'django.db.backends.postgresql',                               
-        'NAME': os.environ['DBNAME'],                                            
-        'HOST': os.environ['DBHOST'],                                            
-        'USER': os.environ['DBUSER'],                                            
-        'PASSWORD': os.environ['DBPASS']                                         
-    }                                                                            
-}
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
