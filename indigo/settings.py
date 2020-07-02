@@ -137,9 +137,9 @@ INDIGO = {
 import dj_database_url
 #db_config = dj_database_url.config(default='postgres://postgres:d6092ffcf10e7bc452b28fa631648940@dokku-postgres-indigo:5432/indigo')
 db_config['ATOMIC_REQUESTS'] = True
-DATABASES = {
-    'default': db_config,
-}
+#DATABASES = {
+#    'default': db_config,
+#}
 
 DATABASES = {
     'default': {
