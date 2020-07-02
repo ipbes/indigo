@@ -1,5 +1,4 @@
 from .settings import *
-import dj_database_url
 
 # Configure default domain name
 ALLOWED_HOSTS = [os.environ['WEBSITE_SITE_NAME'] + '.akn4undocs.ipbes.net', '127.0.0.1'] if 'WEBSITE_SITE_NAME' in os.environ else []

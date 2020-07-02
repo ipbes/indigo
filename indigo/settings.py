@@ -339,6 +339,7 @@ ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = '/accounts/email/'
 ACCOUNT_PRESERVE_USERNAME_CASING = False
 ACCOUNT_SESSION_REMEMBER = True
 ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_EMAIL_VERIFICATION = 'optional' 
 ACCOUNT_USER_DISPLAY = 'indigo_api.serializers.user_display_name'
 ACCOUNT_FORMS = {
     'signup': 'indigo_app.forms.UserSignupForm'
