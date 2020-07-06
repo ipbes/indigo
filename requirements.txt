@@ -4,5 +4,3 @@ gunicorn==19.7.1
 wsgiref==0.1.2
 -e git+https://github.com/laws-africa/indigo.git@6709536f044806b97303c90dffc623d36e2a3de2#egg=indigoo
 whitenoise==1.0.6
-psycopg2==2.7.3.2
-cobalt @ git+https://github.com/laws-africa/cobalt@988e7435a61262fba05eb3beec0908f184fee7
