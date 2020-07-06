@@ -1,6 +1,0 @@
-gevent==1.2.2
-greenlet==0.4.13
-gunicorn==19.7.1
-wsgiref==0.1.2
--e git+https://github.com/laws-africa/indigo.git@6709536f044806b97303c90dffc623d36e2a3de2#egg=indigoo
-whitenoise==1.0.6
