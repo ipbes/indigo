@@ -1,1 +1,1 @@
-web: gunicorn indigo.wsgi:application --preload
+web: gunicorn indigo.wsgi --preload --log-file -
