@@ -1,3 +1,6 @@
+import os
+
+# fetch the development settings 
 from .settings import *
 
 # Configure default domain name
