@@ -1,0 +1,4 @@
+WAIT=10
+ATTEMPTS=5
+
+http://indigo.akn4undocs.ipbes.net/terms
