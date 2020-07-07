@@ -6,10 +6,12 @@ https://docs.djangoproject.com/en/1.7/howto/deployment/wsgi/
 """
 
 import os
-if os.environ.get('DJANGO_ENV') == 'production':
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'indigo.production')
-else:
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'indigo.settings')
+#if os.environ.get('DJANGO_ENV') == 'production':
+#    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'indigo.settings.production')
+#else:
+#    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'indigo.settings.settings')
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "indigo.settings.production")
 
 from django.core.wsgi import get_wsgi_application
 from whitenoise.django import DjangoWhiteNoise
