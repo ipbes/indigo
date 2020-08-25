@@ -1,0 +1,116 @@
+#!/usr/bin/env ruby
+
+require 'thor'
+require 'slaw'
+
+class SlawCLI < Thor
+  # Exit with non-zero exit code on failure.
+  # See https://github.com/erikhuda/thor/issues/244
+  def self.exit_on_failure?
+    true
+  end
+
+  class_option :verbose, type: :boolean, desc: "Display log output on stderr"
+
+  desc "parse FILE", "Parse FILE into Akoma Ntoso XML"
+  option :input, enum: ['text', 'html'], desc: "Type of input if it can't be determined automatically"
+  option :fragment, type: :string, desc: "Akoma Ntoso element name that the imported text represents. Support depends on the grammar."
+  option :id_prefix, type: :string, desc: "Prefix to be used when generating ID elements when parsing a fragment."
+  option :section_number_position, enum: ['before-title', 'after-title', 'guess'], desc: "Where do section titles come in relation to the section number? Default: before-title"
+  option :grammar, type: :string, desc: "Grammar name (usually a two-letter country code). Default is za."
+  option :ascii, type: :boolean, default: false, desc: "Process text as ASCII using %-encoding. This can provide significant speed improvements if the grammar uses only ASCII literals. See https://github.com/cjheath/treetop/issues/31."
+  option :namespace, enum: ['akn3'], default: 'akn3', desc: 'AKN XML namespace to use.'
+  def parse(name)
+    logging
+
+    extractor = Slaw::Extract::Extractor.new
+
+    case options[:input]
+    when 'html'
+      text = extractor.extract_from_html(name)
+    when 'text'
+      text = extractor.extract_from_text(name)
+    else
+      text = extractor.extract_from_file(name)
+    end
+
+    case options[:namespace]
+    when 'akn3'
+      Slaw.akn_namespace = Slaw::AKN3_NS
+    end
+
+    generator = Slaw::ActGenerator.new(options[:grammar] || 'za')
+
+    if options[:fragment]
+      fragment = options[:fragment]
+      fragment = case fragment.downcase
+                 when 'akomantoso'
+                   'act'
+                 when 'doc'
+                   'schedule'
+                 else
+                   fragment
+                  end
+      generator.builder.parse_options[:root] = fragment
+
+      if options[:id_prefix]
+        prefix = options[:id_prefix]
+        prefix += "__" unless prefix.end_with?('__')
+        generator.builder.fragment_id_prefix = prefix
+      end
+    end
+
+    case (options[:section_number_position] || "before-title")
+    when "before-title"
+      generator.parser.options[:section_number_after_title] = false
+    when "after-title"
+      generator.parser.options[:section_number_after_title] = true
+    when "guess"
+      after = generator.guess_section_number_after_title(text)
+      error "guessed section number position is #{after ? "after-title" : "before-title"}"
+
+      generator.parser.options[:section_number_after_title] = after
+    end
+
+    generator.builder.force_ascii = options[:ascii]
+
+    begin
+      act = generator.generate_from_text(text)
+    rescue Slaw::Parse::ParseError => e
+      error e.message
+      exit 1
+    end
+
+    puts act.to_xml(save_with: Nokogiri::XML::Node::SaveOptions::AS_XML)
+  end
+
+  desc "unparse FILE", "Unparse FILE from Akoma Ntoso XML back into text suitable for re-parsing"
+  option :grammar, type: :string, desc: "Grammar name (usually a two-letter country code). Default is za."
+  def unparse(name)
+    generator = Slaw::ActGenerator.new(options[:grammar] || 'za')
+
+    doc = File.open(name, 'r') { |f| doc = generator.builder.parse_xml(f.read) }
+    puts generator.text_from_act(doc)
+  end
+
+  map %w(--version) => :__print_version
+  desc "--version", "Print slaw version info"
+  def __print_version
+    say "slaw #{Slaw::VERSION}"
+  end
+
+  no_commands do
+    def logging
+      logger = Log4r::Logger.new('Slaw')
+      logger.outputters = Log4r::Outputter.stderr
+      logger.outputters[0].level = options[:verbose] ? Log4r::DEBUG : Log4r::ERROR
+    end
+  end
+end
+
+SlawCLI.start(ARGV)
+# Nokogiri can take 5-10 seconds to clean up and we don't care, just
+# exit now
+STDOUT.flush
+STDERR.flush
+exit! 0

@@ -136,11 +136,22 @@ INDIGO = {
 # dj_database_url.config(default='=postgres://indigo:DATABASE-PASSWORD@DATABASE-HOST/indigo \
 
 import dj_database_url
-db_config = dj_database_url.config(default='postgres://indigo:indigo@localhost:5432/indigo')
+db_config = dj_database_url.config(default='postgres://akn4unuser:Mal8ng8Makm8nd8@10.208.59.16:5432/akn4undb')
 db_config['ATOMIC_REQUESTS'] = True
 DATABASES = {
     'default': db_config,
 }
+
+##DATABASES = {
+##'default': {
+   ##'ENGINE': 'django.db.backends.postgresql_psycopg2',
+   ##'NAME': 'akn4undb',
+   ## 'USER': 'akn4unuser',
+   ##'PASSWORD': 'Mal8ng8Makm8nde',
+   ##'HOST': '10.208.59.16',
+   ##'PORT': '5432',
+   ##}
+##}
 
 SITE_ID = 1
 
