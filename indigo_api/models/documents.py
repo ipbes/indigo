@@ -58,6 +58,8 @@ class DocumentQuerySet(models.QuerySet):
 
         See http://docs.oasis-open.org/legaldocml/akn-nc/v1.0/cs01/akn-nc-v1.0-cs01.html#_Toc492651893
         """
+        if not isinstance(frbr_uri, FrbrUri):
+            frbr_uri = FrbrUri.parse(frbr_uri)
         query = self.filter(frbr_uri=frbr_uri.work_uri())
 
         # filter on language
@@ -110,6 +112,10 @@ class DocumentMixin(object):
     this document functionality.
     """
     @property
+    def date(self):
+        return self.work_uri.date
+
+    @property
     def year(self):
         return self.work_uri.date.split('-', 1)[0]
 
@@ -132,6 +138,10 @@ class DocumentMixin(object):
     @property
     def locality(self):
         return self.work_uri.locality
+
+    @property
+    def actor(self):
+        return self.work_uri.actor
 
     @property
     def django_language(self):
@@ -344,12 +354,11 @@ class Document(DocumentMixin, models.Model):
         if from_model:
             self.copy_attributes_from_work()
 
-            self.doc.title = self.title
             self.doc.frbr_uri = self.frbr_uri
+            self.doc.title = self.title
             self.doc.language = self.language.code
 
-            self.doc.work_date = self.doc.publication_date
-            self.doc.expression_date = self.expression_date or self.doc.publication_date or timezone.now()
+            self.doc.expression_date = self.expression_date or self.publication_date or timezone.now()
             self.doc.manifestation_date = self.updated_at or timezone.now()
             self.doc.publication_number = self.publication_number
             self.doc.publication_name = self.publication_name

@@ -23,7 +23,7 @@ from rest_framework.decorators import action as detail_route_action
 from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly, IsAuthenticated
 from reversion import revisions as reversion
 from django_filters.rest_framework import DjangoFilterBackend
-from cobalt import FrbrUri, StructuredDocument, AkomaNtosoDocument
+from cobalt import StructuredDocument
 
 import lxml.html.diff
 from lxml.etree import LxmlError
@@ -335,7 +335,7 @@ class ParseView(DocumentResourceView, APIView):
         serializer.is_valid(raise_exception=True)
 
         fragment = serializer.validated_data.get('fragment')
-        frbr_uri = self.document.work_uri
+        frbr_uri = self.document.expression_uri
 
         importer = plugins.for_locale('importer', frbr_uri.country, frbr_uri.language, frbr_uri.locality)
         importer.fragment = fragment
@@ -343,22 +343,19 @@ class ParseView(DocumentResourceView, APIView):
 
         try:
             text = serializer.validated_data.get('content')
-            xml = importer.import_from_text(text, frbr_uri.work_uri(), '.txt')
+            xml = importer.import_from_text(text, frbr_uri.expression_uri(), '.txt')
         except ValueError as e:
             log.warning("Error during import: %s" % str(e), exc_info=e)
             raise ValidationError({'content': str(e) or "error during import"})
 
-        if fragment:
-            # clean up encodings
-            doc = AkomaNtosoDocument(xml)
-            xml = doc.to_xml(encoding='unicode')
-        else:
+        if not fragment:
             # The importer doesn't have enough information to give us a complete document
             # including the meta section, so it's empty or incorrect. We fold in the meta section
             # from the existing document, so that we return a complete document to the caller.
             klass = StructuredDocument.for_document_type(frbr_uri.doctype)
             doc = klass(xml)
             doc.main.replace(doc.meta, copy.deepcopy(self.document.doc.meta))
+            doc.frbr_uri = frbr_uri
             xml = doc.to_xml(encoding='unicode')
 
         return Response({'output': xml})
