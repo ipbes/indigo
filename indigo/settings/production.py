@@ -2,7 +2,7 @@ from .settings import *
 
 # Configure default domain name
 
-ALLOWED_HOSTS = ['10.208.58.26', '127.0.0.1']
+ALLOWED_HOSTS = ['10.208.58.26', '127.0.0.1', '172.17.0.2']
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
