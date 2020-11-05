@@ -1,4 +1,4 @@
 WAIT=10
 ATTEMPTS=5
 
-http://10.208.58.26/terms
+/terms
