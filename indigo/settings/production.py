@@ -10,8 +10,18 @@ ALLOWED_HOSTS = ['10.208.58.26', '127.0.0.1', '172.17.0.1', '172.17.0.2', '172.1
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
 
-#Debugging
-DEBUG = False
+
+#Storage
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_S3_FILE_OVERWRITE = False
+#AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+#AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_S3_BUCKET')
+#AWS_S3_REGION_NAME = 'eu-west-1'
+AWS_DEFAULT_ACL = None
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
 
 # LOGGING
 # ------------------------------------------------------------------------------
