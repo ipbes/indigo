@@ -53,13 +53,13 @@
         {% endif %}
 
         <div class="form-group">
-          <label for="{{ form.workflow.id_for_label }}">Choose a workflow for newly created tasks</label>
+          <label for="{{ form.workflow.id_for_label }}">Choose a project for newly created tasks</label>
 
           {% if form.fields.workflow.choices %}
             <div class="form-group">
               <div class="form-row">
                 <div class="col-md-6">
-                  <select class="selectpicker form-control" name="{{ form.workflow.name }}" id="{{ form.workflow.id_for_label }}" data-live-search="true" title="Choose a workflow">
+                  <select class="selectpicker form-control" name="{{ form.workflow.name }}" id="{{ form.workflow.id_for_label }}" data-live-search="true" title="Choose a project">
                     {% for option in form.workflow %}
                       {{ option }}
                     {% endfor %}
@@ -71,10 +71,10 @@
               <div class="form-text text-danger">{{ err }}</div>
             {% endfor %}
           {% else %}
-            <div class="text-danger">No workflows (create one and refresh)</div>
+            <div class="text-danger">No projects (create one and refresh)</div>
           {% endif %}
 
-          <a href="{% url 'workflow_create' place=place.place_code %}" target="_blank">Create a new workflow</a>
+          <a href="{% url 'workflow_create' place=place.place_code %}" target="_blank">Create a new project</a>
         </div>
 
       </div>
@@ -108,53 +108,83 @@
               <th>Number</th>
               <th>Year</th>
               <th>FRBR URI</th>
+              <th>Tasks</th>
+              <th>Relationships</th>
+              <th>Actions</th>
             </tr>
           </thead>
 
           <tbody>
-            {% for work in works %}
+            {% for row in works %}
               <tr>
                 <td>
-                  <a href="{{ form.spreadsheet_url.value }}?&range=A{{ work.row }}" target="_blank">{{ work.row }}</a>
+                  <a href="{{ form.spreadsheet_url.value }}?&range=A{{ row.row_number }}" target="_blank">{{ row.row_number }}</a>
                 </td>
                 <td class="text-nowrap">
-                  {% if work.status == 'success' %}
+                  {% if row.status == 'success' %}
                     <i class="fas fa-check-circle text-success"></i> {% if dry_run %}Ready to import{% else %}Imported{% endif %}
-                  {% elif work.status == 'duplicate' %}
+                  {% elif row.status == 'duplicate' %}
                     <i class="fas fa-ban text-info"></i> Duplicate
-                  {% elif work.status == 'error' %}
+                  {% elif row.errors %}
                     <i class="fas fa-exclamation-triangle text-danger"></i> Error
                   {% endif %}
                 </td>
                 <td>
-                  {% if work.status == 'success' %}
-                    {{ work.work.title }}
-                  {% elif work.status == 'duplicate' %}
+                  {% if row.status == 'success' %}
+                    {{ row.work.title }}
+                  {% elif row.status == 'duplicate' %}
                     A work with this type, year and number already exists in this place.
-                  {% elif work.status == 'error' %}
-                    {{ work.error_message }}
+                  {% elif row.errors %}
+                    {{ row.errors }}
                   {% endif %}
                 </td>
                 <td>
-                  {% if work.work.subtype %}
-                    {{ work.work.subtype }}
-                  {% elif work.status != 'error' %}
+                  {% if row.work.subtype %}
+                    {{ row.work.subtype }}
+                  {% elif not row.errors %}
                     {{ view.bulk_creator.default_doctype|capfirst }}
                   {% endif %}
                 </td>
                 <td>
-                  {{ work.work.number }}
+                  {{ row.work.number }}
                 </td>
                 <td>
-                  {{ work.work.year }}
+                  {{ row.work.year }}
                 </td>
                 <td>
-                  {% if work.status == 'error' %}
+                  {% if row.errors %}
                     —
-                  {% elif work.status == 'success' and dry_run %}
-                    {{ work.work.frbr_uri }}
+                  {% elif row.status == 'success' and dry_run %}
+                    {{ row.work.frbr_uri }}
                   {% else %}
-                    <a href="{% url 'work' frbr_uri=work.work.frbr_uri %}" data-popup-url="{% url 'work_popup' frbr_uri=work.work.frbr_uri %}">{{ work.work.frbr_uri }}</a>
+                    <a href="{% url 'work' frbr_uri=row.work.frbr_uri %}" data-popup-url="{% url 'work_popup' frbr_uri=row.work.frbr_uri %}">{{ row.work.frbr_uri }}</a>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if row.tasks %}
+                    <ul class="pl-0">
+                      {% for task in row.tasks %}
+                        <li>{{ task|capfirst }}</li>
+                      {% endfor %}
+                    </ul>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if row.relationships %}
+                    <ul class="pl-0">
+                      {% for relationship in row.relationships %}
+                        <li>{{ relationship }}</li>
+                      {% endfor %}
+                    </ul>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if row.actions %}
+                    <ul class="pl-0">
+                      {% for action in row.actions %}
+                        <li>{{ action }}</li>
+                      {% endfor %}
+                    </ul>
                   {% endif %}
                 </td>
               </tr>
@@ -188,10 +218,10 @@
           <li>Record the Spreadsheet URL under <a href="{% url 'place_settings' place=place.place_code %}" target="_blank">Settings</a>.</li>
           {% if bulk_creator.is_gsheets_enabled %}
             <li>Share the spreadsheet with {{ bulk_creator.share_with }}.</li>
-            <li>Choose a spreadsheet tab and a workflow.</li>
+            <li>Choose a spreadsheet tab and a project.</li>
           {% else %}
             <li>Make it accessible by turning link sharing on: 'Share | Get shareable link' (top-right corner).</li>
-            <li>Choose a workflow.</li>
+            <li>Choose a project.</li>
           {% endif %}
           <li><strong>Preview</strong> the new works to be created, resolve any errors / duplicates and <strong>Refresh preview</strong>.</li>
           <li><strong>Import works</strong>.</li>

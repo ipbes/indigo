@@ -42,7 +42,8 @@
         return;
       }
 
-      this.trigger('change:dom', options);
+      options.fromContent = true;
+      this.trigger('change:dom', model, options);
     },
 
     domChanged: function(model, options) {
@@ -76,7 +77,7 @@
         }
 
         // entire document has changed
-        if (newNodes.length != 1) {
+        if (newNodes.length !== 1) {
           throw "Expected exactly one newNode, got " + newNodes.length;
         }
         console.log('Replacing whole document');
@@ -110,7 +111,7 @@
       }
 
       // ensure attachment ids are correct, we could have deleted an attachment
-      if (oldNode.tagName == 'attachment') {
+      if (oldNode.tagName === 'attachment') {
         this.fixAttachmentIds();
       }
 
