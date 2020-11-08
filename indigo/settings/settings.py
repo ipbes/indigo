@@ -1,9 +1,7 @@
 """
 Django settings for indigo project.
-
 For more information on this file, see
 https://docs.djangoproject.com/en/1.7/topics/settings/
-
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.7/ref/settings/
 """
@@ -13,12 +11,11 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DJANGO_DEBUG', 'true') == 'true'
+DEBUG = os.environ.get('DJANGO_DEBUG', 'true') == 'false'
 
 # SECURITY WARNING: keep the secret key used in production secret!
 if DEBUG:
@@ -136,27 +133,12 @@ INDIGO = {
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
-# home db: db_config = dj_database_url.config(default='postgres://postgres:postgres@localhost:5432/postgres')
-# office db: db_config = dj_database_url.config(default='postgres://postgres:indigo@localhost:5432/postgres')
-# dj_database_url.config(default='=postgres://indigo:DATABASE-PASSWORD@DATABASE-HOST/indigo \
-
 import dj_database_url
 db_config = dj_database_url.config(default='postgres://akn4unuser:Mal8ng8Makm8nd8@10.208.59.16:5432/akn4undb')
 db_config['ATOMIC_REQUESTS'] = True
 DATABASES = {
     'default': db_config,
 }
-
-##DATABASES = {
-##'default': {
-   ##'ENGINE': 'django.db.backends.postgresql_psycopg2',
-   ##'NAME': 'akn4undb',
-   ## 'USER': 'akn4unuser',
-   ##'PASSWORD': 'Mal8ng8Makm8nde',
-   ##'HOST': '10.208.59.16',
-   ##'PORT': '5432',
-   ##}
-##}
 
 SITE_ID = 1
 
@@ -268,7 +250,7 @@ PIPELINE = {
                 'bower_components/moment/locale/en-gb.js',
                 'bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js',
                 'bower_components/showdown/dist/showdown.min.js',
-                'lib/dom-utils.js',
+                'lib/external-imports.js',
                 'javascript/select2-4.0.0.min.js',
                 'javascript/caret.js',
                 'javascript/prettyprint.js',
@@ -397,23 +379,13 @@ MESSAGE_TAGS = {
 # Logging
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': False,
+    'disable_existing_loggers': True,
     'formatters': {
-         'verbose': {
-            'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
-            'datefmt' : "%d/%b/%Y %H:%M:%S"
-        },
         'simple': {
             'format': '%(asctime)s %(levelname)s %(module)s %(process)d %(thread)d %(message)s'
-        },
+        }
     },
     'handlers': {
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': 'indigo.log',
-            'formatter': 'verbose'
-        },
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
