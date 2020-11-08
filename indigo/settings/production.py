@@ -10,6 +10,15 @@ ALLOWED_HOSTS = ['10.208.58.26', '127.0.0.1', '172.17.0.1', '172.17.0.2', '172.1
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
 
+# LOGGING
+# ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/ref/settings/#logging
+# See https://docs.djangoproject.com/en/dev/topics/logging for
+# more details on how to customize your logging configuration.
+# A sample logging configuration. The only tangible logging
+# performed by this configuration is to send an email to
+# the site admins on every HTTP 500 error when DEBUG=False.
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
