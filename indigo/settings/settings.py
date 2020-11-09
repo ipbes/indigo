@@ -18,11 +18,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 DEBUG = os.environ.get('DJANGO_DEBUG', 'true') == 'false'
 
 # SECURITY WARNING: keep the secret key used in production secret!
-if DEBUG:
-    SECRET_KEY = 'j5ikpmmn&1hce#&_8!p)mx5y&*)m$1slu_8!@c1w@%)+_+dxy&'
-else:
-    SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+#if DEBUG:
+#    SECRET_KEY = 'j5ikpmmn&1hce#&_8!p)mx5y&*)m$1slu_8!@c1w@%)+_+dxy&'
+#else:
+#    SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
+SECRET_KEY = 'jqf1!!9742&=zrnsdh&6fes7z+plq(g8r#^6*+9z%pen=!00m@'
 
 ALLOWED_HOSTS = ['*']
 
@@ -134,7 +135,8 @@ INDIGO = {
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
 import dj_database_url
-db_config = dj_database_url.config(default='postgres://akn4unuser:Mal8ng8Makm8nd8@10.208.59.16:5432/akn4undb')
+db_config = dj_database_url.config(default='postgres://postgres:postgres@localhost:5432/postgres')
+#db_config = dj_database_url.config(default='postgres://akn4unuser:Mal8ng8Makm8nd8@10.208.59.16:5432/akn4undb')
 db_config['ATOMIC_REQUESTS'] = True
 DATABASES = {
     'default': db_config,
@@ -339,7 +341,7 @@ ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = '/accounts/email/'
 ACCOUNT_PRESERVE_USERNAME_CASING = False
 ACCOUNT_SESSION_REMEMBER = True
 ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_EMAIL_VERIFICATION = 'optional' 
+ACCOUNT_EMAIL_VERIFICATION = 'optional'
 ACCOUNT_USER_DISPLAY = 'indigo_api.serializers.user_display_name'
 ACCOUNT_FORMS = {
     'signup': 'indigo_app.forms.UserSignupForm'
