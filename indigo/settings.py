@@ -15,17 +15,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DJANGO_DEBUG', 'true') == 'false'
+#DEBUG = os.environ.get('DJANGO_DEBUG', 'true') == 'true'
+DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
 # SECURITY WARNING: keep the secret key used in production secret!
-#if DEBUG:
-#    SECRET_KEY = 'j5ikpmmn&1hce#&_8!p)mx5y&*)m$1slu_8!@c1w@%)+_+dxy&'
-#else:
-#    SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'j5ikpmmn&1hce#&_8!p)mx5y&*)m$1slu_8!@c1w@%)+_+dxy&')
 
-SECRET_KEY = 'jqf1!!9742&=zrnsdh&6fes7z+plq(g8r#^6*+9z%pen=!00m@'
-
-ALLOWED_HOSTS = ['*']
+#ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['10.208.58.26', '127.0.0.1', '172.17.0.1', '172.17.0.2', '172.17.0.3', '172.17.0.4', '172.17.0.5', '3.238.71.183', 'cbd.indigo.ipbes.net', 'akn.indigo.ipbes.net']
 
 
 # Application definition
@@ -135,12 +132,16 @@ INDIGO = {
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
 import dj_database_url
-db_config = dj_database_url.config(default='postgres://postgres:postgres@localhost:5432/postgres')
-#db_config = dj_database_url.config(default='postgres://akn4unuser:Mal8ng8Makm8nd8@10.208.59.16:5432/akn4undb')
-db_config['ATOMIC_REQUESTS'] = True
-DATABASES = {
-    'default': db_config,
-}
+
+# Caches
+if DEBUG:
+    db_config = dj_database_url.config(default='postgres://postgres:postgres@localhost:5432/postgres')
+    db_config['ATOMIC_REQUESTS'] = True
+    DATABASES = {
+        'default': db_config,
+    }
+else:
+    db_from_env = dj_database_url.config(conn_max_age=500)
 
 SITE_ID = 1
 
@@ -181,17 +182,17 @@ TEMPLATES = [
 ]
 
 # attachments
-#if not DEBUG:
-    #DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-    #AWS_S3_FILE_OVERWRITE = False
+if not DEBUG:
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    AWS_S3_FILE_OVERWRITE = False
     #AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
     #AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
-    #AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_S3_BUCKET')
+    AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_S3_BUCKET')
     #AWS_S3_REGION_NAME = 'eu-west-1'
-    #AWS_DEFAULT_ACL = None
-    #AWS_S3_OBJECT_PARAMETERS = {
-        #'CacheControl': 'max-age=86400',
-    #}
+    AWS_DEFAULT_ACL = None
+    AWS_S3_OBJECT_PARAMETERS = {
+        'CacheControl': 'max-age=86400',
+    }
 
 
 # Caches
@@ -290,7 +291,13 @@ SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_HSTS_SECONDS = 3600
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-
+# Additional settings recommended for production environment by manage.py check --deploy
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    X_FRAME_OPTIONS = 'DENY'
+    SECURE_HSTS_PRELOAD = True
 
 # REST
 REST_FRAMEWORK = {
@@ -317,7 +324,7 @@ INDIGO_SOCIAL = {
     'badges': 'indigo_social.default_badges',
 }
 
-DEFAULT_FROM_EMAIL = os.environ.get('DJANGO_DEFAULT_FROM_EMAIL', '%s <%s>' % (INDIGO_ORGANISATION, SUPPORT_EMAIL))
+#DEFAULT_FROM_EMAIL = os.environ.get('DJANGO_DEFAULT_FROM_EMAIL', '%s <%s>' % (INDIGO_ORGANISATION, SUPPORT_EMAIL))
 EMAIL_HOST = os.environ.get('DJANGO_EMAIL_HOST')
 EMAIL_HOST_USER = os.environ.get('DJANGO_EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('DJANGO_EMAIL_HOST_PASSWORD')
@@ -341,7 +348,6 @@ ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = '/accounts/email/'
 ACCOUNT_PRESERVE_USERNAME_CASING = False
 ACCOUNT_SESSION_REMEMBER = True
 ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_EMAIL_VERIFICATION = 'optional'
 ACCOUNT_USER_DISPLAY = 'indigo_api.serializers.user_display_name'
 ACCOUNT_FORMS = {
     'signup': 'indigo_app.forms.UserSignupForm'
